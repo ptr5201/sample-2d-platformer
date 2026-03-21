@@ -1,0 +1,8 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://83kyyc350qv2"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_iwt3b"]
+load_path = "res://.godot/imported/16-bit-spike-Sheet.png-7c869b8dbd0c04fd187e6d5f804f9acf.ctex"
+
+[resource]
+atlas = SubResource("CompressedTexture2D_iwt3b")
+region = Rect2(0, 0, 16, 16)

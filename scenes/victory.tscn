@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://crpopp10cetmt"]
+
+[ext_resource type="Script" uid="uid://ba47jv5la68fj" path="res://scripts/victory.gd" id="1_le47n"]
+
+[node name="victory_node" type="Node2D" unique_id=1077229946]
+script = ExtResource("1_le47n")
+
+[node name="victory_label" type="Label" parent="." unique_id=1165851577]
+offset_left = 206.0
+offset_top = 80.0
+offset_right = 418.0
+offset_bottom = 138.0
+text = "Victory!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="play_again_button" type="Button" parent="." unique_id=413141861]
+offset_left = 215.0
+offset_top = 205.0
+offset_right = 413.0
+offset_bottom = 296.0
+text = "Play Again"
+metadata/_edit_use_anchors_ = true

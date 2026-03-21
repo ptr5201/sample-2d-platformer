@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://rmahussg2a3e"]
+
+[ext_resource type="Script" uid="uid://88s1lpmuvtkk" path="res://scripts/main.gd" id="1_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://cji2cpo4dh80k" path="res://scenes/levels/level1.tscn" id="1_o5qli"]
+[ext_resource type="FontFile" uid="uid://dqjbqo30kl5fw" path="res://assets/fonts/Square-Black.ttf" id="3_sugp2"]
+[ext_resource type="AudioStream" uid="uid://8sqkjeceyumm" path="res://assets/sounds/music.ogg" id="4_jyhfs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0wfyh"]
+bg_color = Color(0.16569087, 0.6537365, 0.8400037, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_size = 5
+
+[node name="Main" type="Node2D" unique_id=1320806018]
+script = ExtResource("1_0wfyh")
+debug_start_level = 1
+
+[node name="LevelRoot" parent="." unique_id=1010827897 instance=ExtResource("1_o5qli")]
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=355697924]
+
+[node name="ScorePanel" type="Panel" parent="HUD" unique_id=1086060989]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -80.0
+offset_right = 80.0
+offset_bottom = 50.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0wfyh")
+
+[node name="ScoreLabel" type="Label" parent="HUD/ScorePanel" unique_id=993992903]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.5
+offset_top = -16.0
+offset_right = 50.5
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_sugp2")
+theme_override_font_sizes/font_size = 32
+text = "Score: 0"
+
+[node name="fade" type="ColorRect" parent="HUD" unique_id=1256522286]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = -1
+anchor_right = 2.14
+anchor_bottom = 1.5690001
+offset_right = -0.00012207031
+offset_bottom = -0.050048828
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Music" type="AudioStreamPlayer2D" parent="." unique_id=1696305513]
+stream = ExtResource("4_jyhfs")
+volume_db = 5.778
+autoplay = true

@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://bcahynmaps4ig"]
+
+[ext_resource type="PackedScene" uid="uid://b8r31d78w4qo6" path="res://scenes/hazard.tscn" id="1_5pg7g"]
+[ext_resource type="Texture2D" uid="uid://c733sw3jqwcss" path="res://assets/images/16-bit-spike-Sheet.png" id="2_xbcdo"]
+
+[node name="hazard" unique_id=474727104 instance=ExtResource("1_5pg7g")]
+position = Vector2(238, 126)
+scale = Vector2(1, 1)
+metadata/_edit_group_ = true
+
+[node name="CollisionPolygon2D" parent="." index="0" unique_id=1053716756]
+position = Vector2(0, 2)
+polygon = PackedVector2Array(-8.5, 6.5, 0, -8, 8.5, 5.5, 16.5, -8, 25, 5.5, 33, -8.5, 41.5, 5, 49.5, -8.5, 57.5, 5, 65.5, -8.5, 74, 5.5)
+
+[node name="SpikeSprites" type="Node2D" parent="." index="1" unique_id=1137707442]
+
+[node name="Sprite2D" type="Sprite2D" parent="SpikeSprites" index="0" unique_id=1193690576]
+texture = ExtResource("2_xbcdo")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+metadata/_edit_group_ = true
+
+[node name="Sprite2D2" type="Sprite2D" parent="SpikeSprites" index="1" unique_id=987897350]
+position = Vector2(16.5, 0)
+texture = ExtResource("2_xbcdo")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+metadata/_edit_group_ = true
+
+[node name="Sprite2D3" type="Sprite2D" parent="SpikeSprites" index="2" unique_id=1017603719]
+position = Vector2(33, -0.5)
+texture = ExtResource("2_xbcdo")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+metadata/_edit_group_ = true
+
+[node name="Sprite2D4" type="Sprite2D" parent="SpikeSprites" index="3" unique_id=2133691264]
+position = Vector2(49.5, -0.5)
+texture = ExtResource("2_xbcdo")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+metadata/_edit_group_ = true
+
+[node name="Sprite2D5" type="Sprite2D" parent="SpikeSprites" index="4" unique_id=1302491065]
+position = Vector2(65.5, -0.5)
+texture = ExtResource("2_xbcdo")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+metadata/_edit_group_ = true
