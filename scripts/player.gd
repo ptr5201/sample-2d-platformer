@@ -2,12 +2,15 @@ extends CharacterBody2D
 
 # This variable will hold a reference to your AnimatedSprite2D node
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+
 @onready var jump_sound: AudioStreamPlayer2D = $JumpSound
 @onready var death_sound: AudioStreamPlayer2D = $DeathSound
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var wall_jump_timer: Timer = $WallJumpTimer
 @onready var wall_coyote_timer: Timer = $WallCoyoteTimer
+@onready var muzzle = $Muzzle
 
+@export var bullet_scene: PackedScene
 
 const SPEED = 300.0
 const JUMP_VELOCITY = -850.0
@@ -39,6 +42,7 @@ func _physics_process(delta: float) -> void:
 		_apply_gravity(delta)
 		_handle_jump()
 		_handle_movement(direction)
+		_handle_combat()
 		move_and_slide()
 		_handle_air_transitions()
 		_update_animations()
@@ -110,6 +114,24 @@ func _handle_movement(direction) -> void:
 		if direction:
 			velocity.x = move_toward(velocity.x, direction * SPEED, 20)
 
+
+func _handle_combat() -> void:
+	if Input.is_action_just_pressed("shoot"):
+		var bullet = bullet_scene.instantiate()
+		
+		# Set the bullet's starting position to the player's hand/muzzle
+		bullet.global_position = muzzle.global_position
+		
+		# Tell the bullet which way to go based on the player's flip state
+		bullet.direction = 1 if animated_sprite_2d.flip_h == false else -1
+		
+		# Add it to the MAIN level scene, not as a child of the player
+		# (Otherwise, if the player moves, the bullets will move with them!)
+		get_tree().current_scene.add_child(bullet)
+		
+		# (Optional) Play shooting animation or sound
+		# _play_shoot_effects()
+
 func _handle_air_transitions() -> void:
 	if was_on_floor and not is_on_floor() and velocity.y >= 0:
 		coyote_timer.start(COYOTE_TIMER_WAIT_SECONDS)
@@ -139,6 +161,11 @@ func _update_animations() -> void:
 	if velocity.x < 0:
 		animated_sprite_2d.flip_h = true
 
+	var direction := Input.get_axis("left", "right")
+	if direction > 0:
+		muzzle.position.x = 15
+	elif direction < 0:
+		muzzle.position.x = -15
 
 func die() -> void:
 	death_sound.play()

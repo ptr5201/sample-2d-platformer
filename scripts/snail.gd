@@ -1,10 +1,12 @@
 extends Area2D
+
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var wall_check: RayCast2D = $WallCheck
 @onready var ledge_check: RayCast2D = $LedgeCheck
 @onready var rectangle_collider: CollisionShape2D = $CollisionShape2D
 @onready var circle_collider: CollisionShape2D = $CollisionShape2D2
 
+@export var health: int = 3
 
 signal player_died
 const SPEED = 50.0
@@ -47,3 +49,22 @@ func turn_around() -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if body.name == "Player" and body.alive:
 		emit_signal("player_died", body)
+
+
+func take_damage(amount: int = 1):
+	health -= amount
+	print("Snail hit! Health remaining: ", health)
+	
+	# Add a small visual "blink" so we know it worked
+	modulate = Color.RED
+	await get_tree().create_timer(0.1).timeout
+	modulate = Color.WHITE
+	
+	if health <= 0:
+		_die()
+
+
+func _die():
+	# TODO: add "poof" particle effect
+	print("Snail defeated!")
+	queue_free()
