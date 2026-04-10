@@ -10,6 +10,7 @@
 [ext_resource type="AudioStream" uid="uid://p38pclchmh1t" path="res://assets/sounds/jump.wav" id="6_tuyoq"]
 [ext_resource type="AudioStream" uid="uid://dui15xnwr0070" path="res://assets/sounds/death.wav" id="7_fjrip"]
 [ext_resource type="Texture2D" uid="uid://dmtjwvnvv2cn3" path="res://assets/images/player/Wall Jump (32x32).png" id="7_ur7pv"]
+[ext_resource type="Texture2D" uid="uid://ccqha3mgfc7qi" path="res://assets/images/player/Shoot (32x32)-sheet.png" id="8_d2wvv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_t4otl"]
 atlas = ExtResource("2_smehm")
@@ -154,6 +155,22 @@ region = Rect2(320, 0, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_hax0n"]
 atlas = ExtResource("4_fjrip")
 region = Rect2(352, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u2ulf"]
+atlas = ExtResource("8_d2wvv")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6e8lb"]
+atlas = ExtResource("8_d2wvv")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2gdjj"]
+atlas = ExtResource("8_d2wvv")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sc3ue"]
+atlas = ExtResource("8_d2wvv")
+region = Rect2(96, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hhpqf"]
 atlas = ExtResource("7_ur7pv")
@@ -315,6 +332,23 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_u2ulf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6e8lb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2gdjj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sc3ue")
+}],
+"loop": false,
+"name": &"shoot",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_hhpqf")
 }, {
 "duration": 1.0,
@@ -348,8 +382,10 @@ bullet_scene = ExtResource("2_y4r1p")
 texture_filter = 1
 position = Vector2(7, -18)
 sprite_frames = SubResource("SpriteFrames_t4otl")
-animation = &"idle"
+animation = &"shoot"
 autoplay = "idle"
+frame = 3
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1229729183]
 position = Vector2(7.3333282, -14.5)
@@ -379,6 +415,6 @@ one_shot = true
 one_shot = true
 
 [node name="Muzzle" type="Marker2D" parent="." unique_id=1109598501]
-position = Vector2(16, -8)
+position = Vector2(19, -9)
 
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]

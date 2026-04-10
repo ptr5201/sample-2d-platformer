@@ -10,7 +10,7 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 func _physics_process(delta: float) -> void:
@@ -25,7 +25,6 @@ func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
 
 # The "Impact" logic for areas, etc.
 func _on_area_entered(area: Area2D) -> void:
-	print("I hit something: ", area.name)
 	# Check if the thing we hit has a function to take damage
 	if area.has_method("take_damage"):
 		area.take_damage(damage)
@@ -34,8 +33,6 @@ func _on_area_entered(area: Area2D) -> void:
 	queue_free()
 
 # The "Impact" logic for world objects
-func _on_body_entered(body: Node2D) -> void:
-	print("I hit a world object: ", body.name)
-
+func _on_body_entered(_body: Node2D) -> void:
 	# Delete the bullet after it hits a world object (e.g., a wall)
 	queue_free()

@@ -116,6 +116,10 @@ func _handle_movement(direction) -> void:
 
 
 func _handle_combat() -> void:
+	_handle_projectiles()
+
+
+func _handle_projectiles() -> void:
 	if Input.is_action_just_pressed("shoot"):
 		var bullet = bullet_scene.instantiate()
 		
@@ -130,7 +134,11 @@ func _handle_combat() -> void:
 		get_tree().current_scene.add_child(bullet)
 		
 		# (Optional) Play shooting animation or sound
-		# _play_shoot_effects()
+		_play_shoot_effects()
+
+
+func _play_shoot_effects() -> void:
+	animated_sprite_2d.animation = "shoot"
 
 func _handle_air_transitions() -> void:
 	if was_on_floor and not is_on_floor() and velocity.y >= 0:
