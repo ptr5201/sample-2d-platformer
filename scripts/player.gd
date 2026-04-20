@@ -21,6 +21,8 @@ const MAX_JUMPS_ALLOWED = 2
 const COYOTE_TIMER_WAIT_SECONDS = 0.15
 const WALL_COYOTE_TIMER_WAIT_SECONDS = 0.15
 const WALL_JUMP_TIMER_WAIT_SECONDS = 0.05
+const FIRE_FRAME_OF_SHOOT_ANIM = 1
+
 
 var alive = true
 var can_move = true
@@ -28,6 +30,8 @@ var number_of_jumps_used = 0
 var was_on_floor = false
 var is_wall_sliding = false
 var last_wall_normal = 0.0
+var wants_to_fire = false
+
 
 func _physics_process(delta: float) -> void:
 	if !alive:
@@ -121,24 +125,32 @@ func _handle_combat() -> void:
 
 func _handle_projectiles() -> void:
 	if Input.is_action_just_pressed("shoot"):
-		var bullet = bullet_scene.instantiate()
-		
-		# Set the bullet's starting position to the player's hand/muzzle
-		bullet.global_position = muzzle.global_position
-		
-		# Tell the bullet which way to go based on the player's flip state
-		bullet.direction = 1 if animated_sprite_2d.flip_h == false else -1
-		
-		# Add it to the MAIN level scene, not as a child of the player
-		# (Otherwise, if the player moves, the bullets will move with them!)
-		get_tree().current_scene.add_child(bullet)
-		
-		# (Optional) Play shooting animation or sound
-		_play_shoot_effects()
+		wants_to_fire = true
+		animated_sprite_2d.play("shoot")
+		animated_sprite_2d.frame = 0 # This ensures we don't skip frame 0
 
 
-func _play_shoot_effects() -> void:
-	animated_sprite_2d.animation = "shoot"
+func _on_animated_sprite_2d_frame_changed() -> void:
+	# Frame 1 is the "Fire" frame in your 0, 1, 2, 3 sequence
+	if animated_sprite_2d != null and animated_sprite_2d.animation == "shoot" and animated_sprite_2d.frame == FIRE_FRAME_OF_SHOOT_ANIM:
+		if wants_to_fire:
+			_spawn_bullet()
+			wants_to_fire = false
+
+
+func _spawn_bullet() -> void:
+	var bullet = bullet_scene.instantiate()
+
+	# Set the bullet's starting position to the player's hand/muzzle
+	bullet.global_position = muzzle.global_position
+
+	# Tell the bullet which way to go based on the player's flip state
+	bullet.direction = 1 if animated_sprite_2d.flip_h == false else -1
+	
+	# Add it to the MAIN level scene, not as a child of the player
+	# (Otherwise, if the player moves, the bullets will move with them!)
+	get_tree().current_scene.add_child(bullet)
+
 
 func _handle_air_transitions() -> void:
 	if was_on_floor and not is_on_floor() and velocity.y >= 0:
@@ -148,6 +160,13 @@ func _handle_air_transitions() -> void:
 
 
 func _update_animations() -> void:
+	# Get the last frame index of the current animation
+	var last_frame = animated_sprite_2d.sprite_frames.get_frame_count("shoot") - 1
+
+	# Only 'return' if we are shooting AND haven't finished the animation
+	if animated_sprite_2d.animation == "shoot" and animated_sprite_2d.frame < last_frame:
+		return
+
 	if is_on_floor():
 		if velocity.x > 1 or velocity.x < -1:
 			animated_sprite_2d.animation = "running"
