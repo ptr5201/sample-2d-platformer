@@ -22,9 +22,13 @@ const COYOTE_TIMER_WAIT_SECONDS = 0.15
 const WALL_COYOTE_TIMER_WAIT_SECONDS = 0.15
 const WALL_JUMP_TIMER_WAIT_SECONDS = 0.05
 const FIRE_FRAME_OF_SHOOT_ANIM = 1
+const SHOOT_COOLDOWN = 0.05
+const MAX_BULLETS_ON_SCREEN = 3
 
 
 var alive = true
+var shoot_cooldown_remaining = 0.0
+var active_bullets = []
 var can_move = true
 var number_of_jumps_used = 0
 var was_on_floor = false
@@ -46,7 +50,7 @@ func _physics_process(delta: float) -> void:
 		_apply_gravity(delta)
 		_handle_jump()
 		_handle_movement(direction)
-		_handle_combat()
+		_handle_combat(delta)
 		move_and_slide()
 		_handle_air_transitions()
 		_update_animations()
@@ -119,15 +123,25 @@ func _handle_movement(direction) -> void:
 			velocity.x = move_toward(velocity.x, direction * SPEED, 20)
 
 
-func _handle_combat() -> void:
-	_handle_projectiles()
+func _handle_combat(delta: float) -> void:
+	_handle_projectiles(delta)
 
 
-func _handle_projectiles() -> void:
+func _handle_projectiles(delta: float) -> void:
+	# Clean up freed bullets from tracking
+	for i in range(active_bullets.size() - 1, -1, -1):
+		if active_bullets[i] == null:
+			active_bullets.remove_at(i)
+
+	# Decrement shoot cooldown
+	if shoot_cooldown_remaining > 0:
+		shoot_cooldown_remaining -= delta
+
 	if Input.is_action_just_pressed("shoot"):
-		wants_to_fire = true
-		animated_sprite_2d.play("shoot")
-		animated_sprite_2d.frame = 0 # This ensures we don't skip frame 0
+		if shoot_cooldown_remaining <= 0 and active_bullets.size() < MAX_BULLETS_ON_SCREEN:
+			wants_to_fire = true
+			animated_sprite_2d.play("shoot")
+			animated_sprite_2d.frame = 0 # This ensures we don't skip frame 0
 
 
 func _on_animated_sprite_2d_frame_changed() -> void:
@@ -150,6 +164,12 @@ func _spawn_bullet() -> void:
 	# Add it to the MAIN level scene, not as a child of the player
 	# (Otherwise, if the player moves, the bullets will move with them!)
 	get_tree().current_scene.add_child(bullet)
+	
+	# Track the bullet for limiting on-screen count
+	active_bullets.append(bullet)
+	
+	# Set the cooldown between shots
+	shoot_cooldown_remaining = SHOOT_COOLDOWN
 
 
 func _handle_air_transitions() -> void:

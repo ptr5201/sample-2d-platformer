@@ -3,7 +3,10 @@ extends Area2D
 @export var speed: float = 800.0
 @export var damage: int = 1
 
+const BULLET_LIFETIME = 10.0
+
 var direction : int = 1 # 1 for right, -1 for left
+var time_alive = 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -16,6 +19,11 @@ func _process(_delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	# Move in a straight line based on the direction set by the player
 	position.x += speed * direction * delta
+	
+	# Track lifetime and remove if exceeded
+	time_alive += delta
+	if time_alive >= BULLET_LIFETIME:
+		queue_free()
 
 # The "Self-Destruct" logic
 func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
