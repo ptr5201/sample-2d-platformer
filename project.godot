@@ -19,6 +19,10 @@ run/main_scene="uid://rmahussg2a3e"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+SoundManager="*res://scenes/sound_manager.tscn"
+
 [display]
 
 window/size/viewport_width=600

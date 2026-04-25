@@ -1,6 +1,5 @@
 extends Area2D
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
-@onready var collected_sound: AudioStreamPlayer2D = $CollectedSound
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 
 
@@ -18,7 +17,7 @@ func _process(_delta: float) -> void:
 
 func _on_body_entered(_body: Node2D) -> void:
 	animated_sprite_2d.animation = "collected"
-	collected_sound.play()
+	SoundManager.play_sound("collect-apple", global_position)
 	collected.emit()
 	call_deferred("_disable_collision")
 

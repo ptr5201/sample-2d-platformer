@@ -3,8 +3,6 @@ extends CharacterBody2D
 # This variable will hold a reference to your AnimatedSprite2D node
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 
-@onready var jump_sound: AudioStreamPlayer2D = $JumpSound
-@onready var death_sound: AudioStreamPlayer2D = $DeathSound
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var wall_jump_timer: Timer = $WallJumpTimer
 @onready var wall_coyote_timer: Timer = $WallCoyoteTimer
@@ -97,7 +95,7 @@ func _handle_jump() -> void:
 			wall_coyote_timer.stop()
 		elif is_on_floor() or not coyote_timer.is_stopped() or number_of_jumps_used < MAX_JUMPS_ALLOWED:
 			velocity.y = JUMP_VELOCITY
-			jump_sound.play()
+			SoundManager.play_sound("player-jump", global_position)
 			number_of_jumps_used += 1
 			coyote_timer.stop()
 
@@ -168,6 +166,9 @@ func _spawn_bullet() -> void:
 	# Track the bullet for limiting on-screen count
 	active_bullets.append(bullet)
 	
+	# Play the shoot sound
+	SoundManager.play_sound("player-shoot", global_position, -10.0)
+	
 	# Set the cooldown between shots
 	shoot_cooldown_remaining = SHOOT_COOLDOWN
 
@@ -215,7 +216,7 @@ func _update_animations() -> void:
 		muzzle.position.x = -15
 
 func die() -> void:
-	death_sound.play()
+	SoundManager.play_sound("player-death", global_position)
 	animated_sprite_2d.animation = "dying"
 	alive = false
 

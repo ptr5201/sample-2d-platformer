@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://b2nxwfb51qb6g"]
+[gd_scene format=3 uid="uid://b2nxwfb51qb6g"]
 
 [ext_resource type="Texture2D" uid="uid://3quiv6d1e768" path="res://assets/images/Snail/Walk (38x24).png" id="1_6lcqf"]
 [ext_resource type="Script" uid="uid://b2gkk17okxfev" path="res://scripts/snail.gd" id="1_oqbjf"]
@@ -86,30 +86,30 @@ size = Vector2(33, 13)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6lcqf"]
 
-[node name="Snail" type="Area2D"]
+[node name="Snail" type="Area2D" unique_id=1388866665]
 texture_filter = 1
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("1_oqbjf")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=505098450]
 sprite_frames = SubResource("SpriteFrames_dft4h")
 animation = &"walking"
 autoplay = "walking"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1285568431]
 position = Vector2(1.5, 4.5)
 shape = SubResource("RectangleShape2D_6lcqf")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="." unique_id=1126412728]
 position = Vector2(6.666667, 0.33333334)
 shape = SubResource("CircleShape2D_6lcqf")
 
-[node name="WallCheck" type="RayCast2D" parent="."]
+[node name="WallCheck" type="RayCast2D" parent="." unique_id=514846695]
 position = Vector2(-17, 0)
 target_position = Vector2(-5, 0)
 
-[node name="LedgeCheck" type="RayCast2D" parent="."]
+[node name="LedgeCheck" type="RayCast2D" parent="." unique_id=2143544030]
 position = Vector2(-16, 11)
 target_position = Vector2(-2, 5)
 collide_with_areas = true

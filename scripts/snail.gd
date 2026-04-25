@@ -53,7 +53,7 @@ func _on_body_entered(body: Node2D) -> void:
 
 func take_damage(amount: int = 1):
 	health -= amount
-	print("Snail hit! Health remaining: ", health)
+	SoundManager.play_sound("enemy-hit", global_position)
 	
 	# Add a small visual "blink" so we know it worked
 	modulate = Color.RED
@@ -66,5 +66,5 @@ func take_damage(amount: int = 1):
 
 func _die():
 	# TODO: add "poof" particle effect
-	print("Snail defeated!")
+	SoundManager.play_sound("enemy-death", global_position, -7.0)
 	queue_free()
