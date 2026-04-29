@@ -22,6 +22,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 SoundManager="*res://scenes/sound_manager.tscn"
+PlayerData="*res://scenes/player_data.tscn"
 
 [display]
 
