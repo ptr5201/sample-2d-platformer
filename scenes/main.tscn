@@ -25,6 +25,18 @@ debug_start_level = 1
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=355697924]
 
+[node name="fade" type="ColorRect" parent="HUD" unique_id=1256522286]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = -1
+anchor_right = 2.14
+anchor_bottom = 1.5690001
+offset_right = -0.00012207031
+offset_bottom = -0.050048828
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
 [node name="ScorePanel" type="Panel" parent="HUD" unique_id=1086060989]
 anchors_preset = 5
 anchor_left = 0.5
@@ -52,17 +64,32 @@ theme_override_fonts/font = ExtResource("3_sugp2")
 theme_override_font_sizes/font_size = 32
 text = "Score: 0"
 
-[node name="fade" type="ColorRect" parent="HUD" unique_id=1256522286]
-modulate = Color(1, 1, 1, 0)
-anchors_preset = -1
-anchor_right = 2.14
-anchor_bottom = 1.5690001
-offset_right = -0.00012207031
-offset_bottom = -0.050048828
+[node name="LivesPanel" type="Panel" parent="HUD" unique_id=313954237]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 95.0
+offset_right = 255.0
+offset_bottom = 50.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0wfyh")
+
+[node name="LivesLabel" type="Label" parent="HUD/LivesPanel" unique_id=767847954]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.5
+offset_top = -16.0
+offset_right = 50.5
+offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_sugp2")
+theme_override_font_sizes/font_size = 32
+text = "Lives: 3"
 
 [node name="Music" type="AudioStreamPlayer2D" parent="." unique_id=1696305513]
 stream = ExtResource("4_jyhfs")

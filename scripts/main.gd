@@ -1,12 +1,12 @@
 extends Node2D
 @onready var score_label: Label = $HUD/ScorePanel/ScoreLabel
+@onready var lives_label: Label = $HUD/LivesPanel/LivesLabel
 @onready var fade: ColorRect = $HUD/fade
 
 @export var debug_start_level: int = -1
 static var has_started_once: bool = false
 
 var level: int = 1
-var score: int = 0
 var current_level_root: Node = null
 
 
@@ -15,11 +15,19 @@ func _ready() -> void:
 	# setup the level
 	fade.modulate.a = 1.0
 	current_level_root = get_node("LevelRoot")
+	
+	# Connect to PlayerData signals for UI updates
+	PlayerData.score_changed.connect(_on_score_changed)
+	PlayerData.lives_changed.connect(_on_lives_changed)
+	
 	if not has_started_once and debug_start_level != -1:
 		level = debug_start_level
 		has_started_once = true
 	else:
 		level = 1
+
+	# Reset player state for new game
+	PlayerData.reset_player_state()
 	await _load_level(level, true, false)
 
 
@@ -33,24 +41,29 @@ func _load_level(level_number: int, first_load: bool, reset_score: bool) -> void
 		await _fade(1.0)
 
 	if reset_score:
-		score = 0
-		score_label.text = "SCORE: 0"
+		PlayerData.reset_score()
 
 	if current_level_root:
 		current_level_root.queue_free()
 
-	# Change level
-	var level_path = "res://scenes/levels/level%s.tscn" % level_number
-	if not FileAccess.file_exists(level_path):
-		level_path = "res://scenes/victory.tscn"
-		current_level_root = load(level_path).instantiate()
-		current_level_root.name = "victory_node"
-		add_child(current_level_root)
+	if PlayerData.lives > 0:
+		# Change level
+		var level_path = "res://scenes/levels/level%s.tscn" % level_number
+		if not FileAccess.file_exists(level_path):
+			level_path = "res://scenes/victory.tscn"
+			current_level_root = load(level_path).instantiate()
+			current_level_root.name = "victory_node"
+			add_child(current_level_root)
+		else:
+			current_level_root = load(level_path).instantiate()
+			current_level_root.name = "LevelRoot"
+			add_child(current_level_root)
+			_setup_level(current_level_root)
 	else:
-		current_level_root = load(level_path).instantiate()
-		current_level_root.name = "LevelRoot"
+		var game_over_path = "res://scenes/game_over.tscn"
+		current_level_root = load(game_over_path).instantiate()
+		current_level_root.name = "game_over_node"
 		add_child(current_level_root)
-		_setup_level(current_level_root)
 
 	# Fade in to clear, then allow mouse clicks
 	await _fade(0.0)
@@ -67,7 +80,7 @@ func _setup_level(level_root: Node) -> void:
 	var apples = level_root.get_node_or_null("Apples")
 	if apples:
 		for apple in apples.get_children():
-			apple.collected.connect(increase_score)
+			apple.collected.connect(_on_apple_collected)
 
 	# connect enemies
 	var enemies = level_root.get_node_or_null("Enemies")
@@ -94,16 +107,20 @@ func _on_exit_body_entered(body: Node2D) -> void:
 
 func _on_player_died(body) -> void:
 	body.die()
+	PlayerData.lose_life()
 	await _load_level(level, false, true)
 
 
-#################
-# SCORE
-#################
-func increase_score() -> void:
-	score += 1
-	score_label.text = "Score: %s" % score
+func _on_apple_collected() -> void:
+	PlayerData.add_score(1)
 
+
+func _on_lives_changed(new_lives: int) -> void:
+	lives_label.text = "Lives: %s" % new_lives
+
+
+func _on_score_changed(new_score: int) -> void:
+	score_label.text = "Score: %s" % new_score
 
 func _fade(to_alpha: float) -> void:
 	var tween := create_tween()

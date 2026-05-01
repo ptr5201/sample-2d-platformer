@@ -15,11 +15,12 @@ func _process(_delta: float) -> void:
 	pass
 
 
-func _on_body_entered(_body: Node2D) -> void:
-	animated_sprite_2d.animation = "collected"
-	SoundManager.play_sound("collect-apple", global_position)
-	collected.emit()
-	call_deferred("_disable_collision")
+func _on_body_entered(body: Node2D) -> void:
+	if body.name == "Player":
+		animated_sprite_2d.animation = "collected"
+		SoundManager.play_sound("collect-apple", global_position)
+		collected.emit()
+		call_deferred("_disable_collision")
 
 
 func _disable_collision() -> void:
