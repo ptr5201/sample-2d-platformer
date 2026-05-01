@@ -21,6 +21,7 @@ func _on_body_entered(_body: Node2D) -> void:
 	collected.emit()
 	call_deferred("_disable_collision")
 
+
 func _disable_collision() -> void:
 	collision_shape_2d.disabled = true
 
